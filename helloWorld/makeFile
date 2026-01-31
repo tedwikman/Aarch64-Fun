@@ -1,0 +1,25 @@
+# Variables
+NAME = helloWorld
+SRC = $(NAME).s
+BUILD_DIR = build
+OBJ = $(BUILD_DIR)/$(NAME).o
+TARGET = $(BUILD_DIR)/$(NAME)
+
+SDK = $(shell xcrun -show-sdk-path)
+
+all: $(TARGET)
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+
+$(TARGET): $(OBJ)
+	clang $(OBJ) -o $(TARGET) -isysroot $(SDK)
+
+$(OBJ): $(SRC) | $(BUILD_DIR)
+	as -o $(OBJ) $(SRC)
+
+run: all
+	./$(TARGET)
+
+clean:
+	rm -f $(OBJ) $(TARGET)
